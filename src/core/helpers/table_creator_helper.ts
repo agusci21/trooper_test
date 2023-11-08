@@ -1,4 +1,4 @@
-import { SeedDataHelper } from "../db/seed_data"
+import StudentSubjectDto from "../../features/associations/student_subject/data/dto/student_subject_dto"
 import StudentDTO from "../dtos/student_dto"
 import SubjectDTO from "../dtos/subject_dto"
 
@@ -41,10 +41,15 @@ const createSubjectTableIfNotExist = async () => {
 }
 
 const createStudentSubjectTableIfNotExist = async () => {
-
+    StudentSubjectDto.sync().then(() => {
+        console.log("Table created: student_subject")
+    }).catch((_) => {
+        console.log(_)
+        console.log("could not create table student_subject")
+    })
 }
 
 const generateSeedData = async () => {
-    await SeedDataHelper.generateSubjectsSeedData()
-    await SeedDataHelper.genetateStudentsSeedData()
+    //await SeedDataHelper.generateSubjectsSeedData()
+    //await SeedDataHelper.genetateStudentsSeedData()
 }

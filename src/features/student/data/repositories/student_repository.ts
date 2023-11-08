@@ -6,10 +6,8 @@ import { GetStudentsInput } from "../../domain/inputs_outputs/get_students/get_s
 import { GetStudentsOutput } from "../../domain/inputs_outputs/get_students/get_students_output";
 import { IStudentRepository } from "../../domain/repositories/i_students_repository";
 import { StudentMapper } from "../mappers/student_mapper";
-import { Op } from 'sequelize';
 import { UUIDHelper } from "../../../../core/helpers/uuid_helper";
 import { PasswordHelper } from "../../../../core/helpers/password_helper";
-import SubjectDTO from "../../../../core/dtos/subject_dto";
 
 export class StudentRepository implements IStudentRepository {
     async getStudentById(id: string): Promise<Student | null> {
@@ -47,33 +45,9 @@ export class StudentRepository implements IStudentRepository {
             return new CreateStudentOutput({error: 'internal_server_error'})
         }
     }
-    async getAllStudents(input: GetStudentsInput): Promise<GetStudentsOutput> {
+    async getAllStudents(_: GetStudentsInput): Promise<GetStudentsOutput> {
         try {
-            const studentsDto: StudentDTO[] = await StudentDTO.findAll<StudentDTO>({
-                include: {
-                    model: SubjectDTO,
-                    as: 'subjects'
-                },
-                where: {
-                    [Op.and]: [
-                        {
-                            firstName: {
-                                [Op.like]: `%${input.firstName ?? ''}%`
-                            }
-                        },
-                        {
-                            lastName: {
-                                [Op.like]: `%${input.lastName ?? ''}%`
-                            }
-                        },
-                        {
-                            email: {
-                                [Op.like]: `%${input.email ?? ''}%`
-                            }
-                        }
-                    ]
-                }
-            });
+            const studentsDto: StudentDTO[] = await StudentDTO.findAll<StudentDTO>();
             const students: Student[] = studentsDto.map(e => StudentMapper.fromDto(e));
             return new GetStudentsOutput({
                 students: students

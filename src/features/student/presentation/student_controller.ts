@@ -10,12 +10,9 @@ export class StudentController {
         this.repository = repository
     }
 
-    public getStudents = async (req: Request, res: Response) => {
-        const { firstName, lastName, email } = req.query
+    public getStudents = async (_: Request, res: Response) => {
         const input = new GetStudentsInput({
-            firstName: firstName as string,
-            lastName: lastName as string,
-            email: email as string
+           
         })
         const output = await this.repository.getAllStudents(input);
         res.json({
