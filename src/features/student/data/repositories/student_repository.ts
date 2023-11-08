@@ -8,6 +8,7 @@ import { IStudentRepository } from "../../domain/repositories/i_students_reposit
 import { StudentMapper } from "../mappers/student_mapper";
 import { UUIDHelper } from "../../../../core/helpers/uuid_helper";
 import { PasswordHelper } from "../../../../core/helpers/password_helper";
+import SubjectDTO from "../../../../core/dtos/subject_dto";
 
 export class StudentRepository implements IStudentRepository {
     async getStudentById(id: string): Promise<Student | null> {
@@ -47,10 +48,15 @@ export class StudentRepository implements IStudentRepository {
     }
     async getAllStudents(_: GetStudentsInput): Promise<GetStudentsOutput> {
         try {
-            const studentsDto: StudentDTO[] = await StudentDTO.findAll<StudentDTO>();
+            const studentsDto: StudentDTO[] = await StudentDTO.findAll<StudentDTO>({
+                include: [{
+                  model: SubjectDTO,
+                  as: 'subjects',
+                }],
+              });
             const students: Student[] = studentsDto.map(e => StudentMapper.fromDto(e));
             return new GetStudentsOutput({
-                students: students
+                students: students,
             });
         } catch (e) {
             console.log(e)

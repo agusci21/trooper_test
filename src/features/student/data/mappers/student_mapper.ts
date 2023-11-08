@@ -5,6 +5,7 @@ import { SubjectMapper } from "./subject_mapper";
 export abstract class StudentMapper {
 
     public static fromDto(dto: StudentDTO): Student {
+        console.log(dto.subjects)
         return new Student({
             docket: dto.docket,
             name: dto.name,
