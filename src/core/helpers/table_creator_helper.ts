@@ -46,5 +46,5 @@ const createStudentSubjectTableIfNotExist = async () => {
 
 const generateSeedData = async () => {
     await SeedDataHelper.generateSubjectsSeedData()
-    //await SeedDataHelper.genetateStudentsSeedData()
+    await SeedDataHelper.genetateStudentsSeedData()
 }

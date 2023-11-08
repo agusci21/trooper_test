@@ -4,11 +4,7 @@ import SubjectDTO from './subject_dto'
 
 class StudentDTO extends Model {
   declare docket: number
-  declare dni: number
-  declare firstName: string
-  declare lastName: string
-  declare email: string
-  declare password: string
+  declare name: string
   declare subjects: SubjectDTO[]
 }
 
@@ -19,24 +15,7 @@ StudentDTO.init(
       allowNull: false,
       primaryKey: true,
     },
-    dni: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },

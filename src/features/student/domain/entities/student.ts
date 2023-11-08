@@ -1,28 +1,21 @@
-import { Person } from "../../../../core/entities/person"
 import { Subject } from "./subject"
 
 interface Arguments {
-    readonly dni: number
     readonly docket: number
-    readonly firstName: string
-    readonly lastName: string
-    readonly email: string
+    readonly name: string
     readonly subjects?: Subject[]
 }
 
-export class Student extends Person{
+export class Student {
     readonly docket: number
+    readonly name: string
     readonly subjects: Subject[]
 
     constructor(arg: Arguments) {
-        super({
-            dni: arg.dni,
-            email: arg.email,
-            firstName: arg.firstName,
-            lastName: arg.lastName,
-        })
-        this.docket = arg.docket
-        this.subjects = arg.subjects ?? []
+
+        this.docket = arg.docket;
+        this.name = arg.name;
+        this.subjects = arg.subjects ?? [];
     }
 
 }
