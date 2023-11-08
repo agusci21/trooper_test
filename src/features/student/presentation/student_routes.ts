@@ -10,6 +10,7 @@ export abstract class StudentRoutes {
         const router = Router()
         const controller = new StudentController(new StudentRepository())
         router.get('/', controller.getStudents)
+        router.get('/averange', controller.getAverageFromStudent)
         router.post('/', StudentMiddlewares.createStudent, controller.createStudent)
         return router
     }

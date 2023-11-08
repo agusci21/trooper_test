@@ -9,23 +9,24 @@ import { StudentMapper } from "../mappers/student_mapper";
 import { UUIDHelper } from "../../../../core/helpers/uuid_helper";
 import { PasswordHelper } from "../../../../core/helpers/password_helper";
 import SubjectDTO from "../../../../core/dtos/subject_dto";
+import { Op } from "sequelize";
 
 export class StudentRepository implements IStudentRepository {
     async getStudentById(id: string): Promise<Student | null> {
         const student = await StudentDTO.findByPk(id)
-        if(!student){
+        if (!student) {
             return null
         }
         return StudentMapper.fromDto(student)
     }
     async createStudent(input: CreateStudentInput): Promise<CreateStudentOutput> {
-        try{
+        try {
             const existStudentEmail = await StudentDTO.findOne({
                 where: {
                     email: input.email
-                } 
+                }
             }) != null
-            if(existStudentEmail){
+            if (existStudentEmail) {
                 return new CreateStudentOutput({
                     error: `email ${input.email} in use`
                 })
@@ -41,19 +42,33 @@ export class StudentRepository implements IStudentRepository {
             return new CreateStudentOutput({
                 student: StudentMapper.fromDto(student)
             })
-        }catch(e){
+        } catch (e) {
             console.log(e)
-            return new CreateStudentOutput({error: 'internal_server_error'})
+            return new CreateStudentOutput({ error: 'internal_server_error' })
         }
     }
-    async getAllStudents(_: GetStudentsInput): Promise<GetStudentsOutput> {
+    async getAllStudents(input: GetStudentsInput): Promise<GetStudentsOutput> {
         try {
             const studentsDto: StudentDTO[] = await StudentDTO.findAll<StudentDTO>({
+                where: {
+                    [Op.and]: [
+                        {
+                            name: {
+                                [Op.like]: `%${input.name ?? ''}%`
+                            }
+                        },
+                        {
+                            docket: {
+                                [Op.like]: `%${input.docket ?? ''}%`
+                            }
+                        },
+                    ]
+                },
                 include: [{
-                  model: SubjectDTO,
-                  as: 'subjects',
+                    model: SubjectDTO,
+                    as: 'subjects',
                 }],
-              });
+            });
             const students: Student[] = studentsDto.map(e => StudentMapper.fromDto(e));
             return new GetStudentsOutput({
                 students: students,

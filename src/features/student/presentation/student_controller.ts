@@ -12,7 +12,7 @@ export class StudentController {
 
     public getStudents = async (_: Request, res: Response) => {
         const input = new GetStudentsInput({
-           
+
         })
         const output = await this.repository.getAllStudents(input);
         res.json({
@@ -32,7 +32,7 @@ export class StudentController {
 
         const output = await this.repository.createStudent(input);
 
-        if(output.error){
+        if (output.error) {
             res.json({
                 error: output.error
             })
@@ -41,6 +41,24 @@ export class StudentController {
 
         res.json({
             student: output.student
+        })
+    }
+
+    public getAverageFromStudent = async (req: Request, res: Response) => {
+        const { docket, name } = req.query;
+        const input = new GetStudentsInput({ docket: docket as string ?? '', name: name as string ?? '' })
+        console.table(input)
+        const output = await this.repository.getAllStudents(input);
+
+        if (output.error) {
+            res.json({
+                error: output.error
+            })
+            return;
+        }
+
+        res.json({
+            student: output.students!
         })
     }
 
